@@ -3,150 +3,281 @@
 ## 📦 Tổng Quan Dự Án
 **Tên dự án**: Blog Backend  
 **Mô tả**:  
-- Dự án backend được xây dựng bằng **Spring Boot** với kiến trúc RESTful API.  
-- Cung cấp chức năng quản lý **người dùng** (đăng ký, đăng nhập) và **bài viết** (CRUD).  
-- Áp dụng **Spring Security** và **JWT** để xác thực & bảo mật.  
-- Sử dụng **JPA/Hibernate** để thao tác với cơ sở dữ liệu (MySQL/H2).  
+- Backend **Spring Boot 3** theo kiến trúc **RESTful API**.  
+- Chức năng: **Auth** (đăng ký/đăng nhập JWT), **Posts** (CRUD + phân quyền tác giả), **Admin** (quản lý user, phân trang + tìm kiếm).  
+- Bảo mật bằng **Spring Security + JWT**.  
+- ORM **JPA/Hibernate**, DB **MySQL** (prod) / **H2** (dev).  
 
 ---
 
-## 🚀 Công Nghệ Sử Dụng
+## 🧰 Công Nghệ Sử Dụng
 
-### 1️⃣ Nền Tảng Cơ Bản
-- **Spring Boot Starter Web**: Xây dựng API RESTful.  
-    ```xml
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    ```
-- **Spring Boot DevTools**: Reload nhanh trong quá trình phát triển.  
+- **Java 17**
+- **Spring Boot 3.3.x**
+- **Spring Web**, **Spring Data JPA**, **Spring Security**
+- **jjwt 0.11.5** (JWT)
+- **H2**, **MySQL Connector/J**
+- **Validation**, **Lombok**
 
----
+### Maven (pom.xml - trích yếu)
+```xml
+<dependencies>
+  <!-- Web -->
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+  </dependency>
 
-### 2️⃣ Quản Lý Dữ Liệu
-- **Spring Data JPA**: ORM thao tác dữ liệu với Hibernate.  
-    ```xml
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    ```
-- **MySQL Connector**: Kết nối cơ sở dữ liệu MySQL.  
-    ```xml
-    <dependency>
-        <groupId>com.mysql</groupId>
-        <artifactId>mysql-connector-j</artifactId>
-        <scope>runtime</scope>
-    </dependency>
-    ```
-- **H2 Database (tuỳ chọn)**: Database in-memory cho môi trường dev/test.  
-    ```xml
-    <dependency>
-        <groupId>com.h2database</groupId>
-        <artifactId>h2</artifactId>
-        <scope>runtime</scope>
-    </dependency>
-    ```
+  <!-- JPA -->
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+  </dependency>
 
----
+  <!-- Security -->
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+  </dependency>
 
-### 3️⃣ Xác Thực và Bảo Mật
-- **Spring Security**: Bảo mật và phân quyền người dùng.  
-    ```xml
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-security</artifactId>
-    </dependency>
-    ```
-- **JWT (JSON Web Tokens)**: Quản lý phiên làm việc bằng token.  
-    ```xml
-    <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt-api</artifactId>
-        <version>0.11.5</version>
-    </dependency>
-    <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt-impl</artifactId>
-        <version>0.11.5</version>
-        <scope>runtime</scope>
-    </dependency>
-    <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt-jackson</artifactId>
-        <version>0.11.5</version>
-        <scope>runtime</scope>
-    </dependency>
-    ```
+  <!-- Validation -->
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+  </dependency>
 
----
+  <!-- JWT -->
+  <dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-api</artifactId>
+    <version>0.11.5</version>
+  </dependency>
+  <dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-impl</artifactId>
+    <version>0.11.5</version>
+    <scope>runtime</scope>
+  </dependency>
+  <dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-jackson</artifactId>
+    <version>0.11.5</version>
+    <scope>runtime</scope>
+  </dependency>
 
-### 4️⃣ Hỗ Trợ Khác
-- **Spring Boot Validation**: Kiểm tra dữ liệu đầu vào.  
-    ```xml
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-validation</artifactId>
-    </dependency>
-    ```
-- **Lombok**: Giảm boilerplate code.  
-    ```xml
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <optional>true</optional>
-    </dependency>
-    ```
-- **Spring Boot Maven Plugin**: Build và chạy ứng dụng.  
-    ```xml
-    <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-    </plugin>
-    ```
+  <!-- DB -->
+  <dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>runtime</scope>
+  </dependency>
+  <dependency>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
+    <scope>runtime</scope>
+  </dependency>
+</dependencies>
+```
 
 ---
 
-## 🛠️ Tính Năng Chính
-- **Người dùng**: Đăng ký, đăng nhập, xác thực JWT.  
-- **Bài viết (Post)**: Tạo mới, xem danh sách, chi tiết, chỉnh sửa, xoá.  
-- **Bảo mật API**:  
-  - `/api/auth/**` public.  
-  - `/api/posts/**` yêu cầu JWT.  
-- **Xử lý lỗi**: Trả về HTTP status code phù hợp (`401`, `403`, `404`, `409` …).  
+## ⚙️ Cấu Hình Ứng Dụng
+
+> File: `src/main/resources/application.yml`
+
+```yaml
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/blogdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=utf8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+
+jwt:
+  secret: change-this-to-a-very-long-random-secret-change-me-1234567890abcd
+  expiration-ms: 86400000
+```
+
+### CORS
+```java
+@Bean
+public CorsFilter corsFilter() {
+  var source = new UrlBasedCorsConfigurationSource();
+  var config = new CorsConfiguration();
+  config.setAllowCredentials(true);
+  config.setAllowedOriginPatterns(List.of("http://localhost:3000"));
+  config.setAllowedHeaders(List.of("*"));
+  config.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+  source.registerCorsConfiguration("/**", config);
+  return new CorsFilter(source);
+}
+```
+
+### Security Rules
+```java
+http
+  .authorizeHttpRequests(authz -> authz
+      .requestMatchers("/api/auth/**").permitAll()
+      .requestMatchers("/api/admin/**").hasRole("ADMIN")
+      .anyRequest().authenticated()
+  )
+  .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+```
 
 ---
 
 ## ▶️ Cách Chạy
-- **Dev (H2 Database)**  
-    ```bash
-    mvn spring-boot:run
-    ```
-    Truy cập H2 console: [http://localhost:8080/h2](http://localhost:8080/h2)  
 
-- **Prod (MySQL)**  
-    1. Tạo database:  
-        ```sql
-        CREATE DATABASE blogdb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-        ```
-    2. Sửa thông tin MySQL trong `application.yml`.  
-    3. Chạy ứng dụng:  
-        ```bash
-        mvn clean package
-        java -jar target/blog-0.0.1-SNAPSHOT.jar
-        ```
+### Dev (H2)
+```bash
+mvn spring-boot:run
+```
+- Console: [http://localhost:8080/h2](http://localhost:8080/h2)
+
+### Prod (MySQL)
+```sql
+CREATE DATABASE blogdb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+```bash
+mvn clean package
+java -jar target/blog-0.0.1-SNAPSHOT.jar
+```
 
 ---
 
-## 📑 API Endpoints
-- **Auth**  
-  - `POST /api/auth/register` → Đăng ký  
-  - `POST /api/auth/login` → Đăng nhập (trả JWT)  
+## 🔑 Xác Thực (JWT)
 
-- **Posts (yêu cầu JWT)**  
-  - `GET /api/posts` → Danh sách  
-  - `GET /api/posts/{id}` → Chi tiết  
-  - `POST /api/posts` → Tạo mới  
-  - `PUT /api/posts/{id}` → Chỉnh sửa (chỉ tác giả)  
-  - `DELETE /api/posts/{id}` → Xoá (chỉ tác giả)  
+- Sau khi `POST /api/auth/login` thành công, client cần gắn:
+```
+Authorization: Bearer <token>
+```
+- Token hết hạn theo `jwt.expiration-ms`.
+
+---
+
+## 📚 API Endpoints
+
+### Auth (public)
+#### `POST /api/auth/register`
+```json
+{
+  "username": "user1",
+  "password": "123456"
+}
+```
+
+#### `POST /api/auth/login`
+```json
+{
+  "username": "user1",
+  "password": "123456"
+}
+```
+Trả về:
+```json
+{
+  "token": "xxx.yyy.zzz",
+  "username": "user1"
+}
+```
+
+#### `GET /api/auth/me`
+- Header: `Authorization: Bearer <token>`
+- Trả về:
+```json
+{
+  "id": 1,
+  "username": "user1",
+  "role": "ROLE_USER"
+}
+```
+
+---
+
+### Posts (yêu cầu JWT)
+
+#### `GET /api/posts?page=0&size=10`
+```json
+{
+  "content": [
+    { "id": 1, "title": "Post 1", "content": "Nội dung", "author": "user1" }
+  ],
+  "totalElements": 1,
+  "totalPages": 1,
+  "size": 10,
+  "number": 0
+}
+```
+
+#### `POST /api/posts`
+```json
+{
+  "title": "Sample",
+  "content": "This is sample content"
+}
+```
+
+#### `PUT /api/posts/{id}`
+```json
+{
+  "title": "Updated",
+  "content": "Updated content"
+}
+```
+
+#### `DELETE /api/posts/{id}` → 204 No Content
+
+#### `GET /api/posts/mine` → chỉ trả bài viết của user hiện tại.
+
+---
+
+### Admin (ROLE_ADMIN)
+
+#### `GET /api/admin/users?page=0&size=10&q=abc`
+- Trả về danh sách user phân trang.
+
+#### `GET /api/admin/users/{id}`
+```json
+{ "id": 1, "username": "user1", "role": "ROLE_USER" }
+```
+
+#### `POST /api/admin/users`
+```json
+{
+  "username": "newuser",
+  "password": "123456",
+  "role": "ROLE_ADMIN"
+}
+```
+
+#### `PUT /api/admin/users/{id}`
+```json
+{
+  "password": "newpass",
+  "role": "ROLE_USER"
+}
+```
+
+#### `DELETE /api/admin/users/{id}` → 204 No Content
+
+---
+
+## 🧪 Test với Postman
+
+1. Gửi `POST /api/auth/register` tạo user mới.  
+2. Gửi `POST /api/auth/login` → copy `token`.  
+3. Tạo **collection** trong Postman, thêm variable `token`.  
+4. Mỗi request protected thêm Header:
+```
+Authorization: Bearer {{token}}
+```
+5. Test các API Posts / Admin theo role.
