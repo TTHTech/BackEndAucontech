@@ -87,8 +87,6 @@ public class AdminUserController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        // Không cho xóa chính admin mặc định nếu bạn muốn (tuỳ chọn):
-        // var me = ... (nếu cần ngăn tự xoá chính mình)
         if (!users.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         users.deleteById(id);
     }

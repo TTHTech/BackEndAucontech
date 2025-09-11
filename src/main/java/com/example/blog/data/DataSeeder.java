@@ -19,7 +19,6 @@ public class DataSeeder {
         return args -> {
             PasswordEncoder encoder = new BCryptPasswordEncoder();
 
-            // Admin (cố định)
             UserEntity admin = users.findByUsername("admin").orElseGet(() -> {
                 UserEntity u = new UserEntity();
                 u.setUsername("admin");
@@ -28,7 +27,6 @@ public class DataSeeder {
                 return users.save(u);
             });
 
-            // User thường (cố định)
             UserEntity user = users.findByUsername("user").orElseGet(() -> {
                 UserEntity u = new UserEntity();
                 u.setUsername("user");
@@ -37,7 +35,6 @@ public class DataSeeder {
                 return users.save(u);
             });
 
-            // Thêm 10 user: user1..user10 (nếu chưa có)
             for (int i = 1; i <= 10; i++) {
                 String uname = "user" + i;
                 if (users.findByUsername(uname).isEmpty()) {
@@ -49,8 +46,6 @@ public class DataSeeder {
                 }
             }
 
-
-            // Thêm 10 post mẫu nếu chưa có (tên, nội dung ngắn)
             if (posts.count() == 0) {
                 // Lấy lại 1 vài tác giả cho đa dạng
                 UserEntity author1 = users.findByUsername("user1").orElse(user);
@@ -61,7 +56,6 @@ public class DataSeeder {
                     PostEntity p = new PostEntity();
                     p.setTitle("Sample Post #" + i);
                     p.setContent("This is sample content for post #" + i + ". Seeded by DataSeeder.");
-                    // quay vòng tác giả: admin, user1, user2
                     if (i % 3 == 1) p.setAuthor(author3);
                     else if (i % 3 == 2) p.setAuthor(author1);
                     else p.setAuthor(author2);
