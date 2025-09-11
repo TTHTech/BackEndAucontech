@@ -19,7 +19,56 @@
 - **H2**, **MySQL Connector/J**
 - **Validation**, **Lombok**
 
-### Maven (pom.xml - trích yếu)
+## 📂 Cấu Trúc Thư Mục Backend
+
+```plaintext
+src/
+├─ main/
+│  ├─ java/com/example/blog/
+│  │  ├─ BlogApplication.java          # Điểm khởi chạy Spring Boot
+│  │  │
+│  │  ├─ config/                       # Cấu hình bảo mật & JWT
+│  │  │  ├─ CorsConfig.java
+│  │  │  ├─ SecurityConfig.java
+│  │  │  └─ JwtUtil.java
+│  │  │
+│  │  ├─ data/                         # Seeder khởi tạo dữ liệu
+│  │  │  └─ DataSeeder.java
+│  │  │
+│  │  ├─ user/                         # Quản lý người dùng
+│  │  │  ├─ AuthController.java        # Đăng ký, đăng nhập, /me
+│  │  │  ├─ UserEntity.java
+│  │  │  ├─ UserRepository.java
+│  │  │  ├─ UserService.java
+│  │  │  ├─ Role.java
+│  │  │  └─ dto/                       # DTO cho auth
+│  │  │     ├─ AuthRequest.java
+│  │  │     ├─ AuthResponse.java
+│  │  │     └─ RegisterRequest.java
+│  │  │
+│  │  ├─ post/                         # Quản lý bài viết
+│  │  │  ├─ PostController.java
+│  │  │  ├─ PostService.java
+│  │  │  ├─ PostRepository.java
+│  │  │  ├─ PostEntity.java
+│  │  │  └─ dto/
+│  │  │     └─ PostRes.java
+│  │  │
+│  │  ├─ admin/                        # Quản lý user cho admin
+│  │  │  ├─ AdminUserController.java
+│  │  │  └─ dto/
+│  │  │     └─ UserAdminDtos.java
+│  │  │
+│  │  └─ ... (các package khác nếu có)
+│  │
+│  └─ resources/
+│     ├─ application.yml               # Cấu hình DB, JPA, JWT
+│     └─ static / templates (nếu cần)
+│
+└─ test/java/com/example/blog/         # Unit test (chưa triển khai nhiều)
+```
+
+### Maven (pom.xml - trích phần quan trọng)
 ```xml
 <dependencies>
   <!-- Web -->
@@ -281,3 +330,4 @@ Trả về:
 Authorization: Bearer {{token}}
 ```
 5. Test các API Posts / Admin theo role.
+
