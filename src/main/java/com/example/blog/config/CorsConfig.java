@@ -15,10 +15,11 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(List.of("*")); // Thay đổi này
+        config.addAllowedOrigin("https://front-end-aucontech.vercel.app");
+        config.addAllowedOrigin("http://localhost:3000");
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setExposedHeaders(List.of("Authorization")); // Thêm dòng này
+        config.setExposedHeaders(List.of("Authorization"));
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
