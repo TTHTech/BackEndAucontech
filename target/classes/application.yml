@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://ep-shy-dream-a1cm704u-pooler.ap-southeast-1.aws.neon.tech:5432/neondb?sslmode=require
+    driver-class-name: org.postgresql.Driver
+    username: neondb_owner
+    password: npg_uMdCyfnI74aG
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  secret: change-this-to-a-very-long-random-secret-change-me-1234567890abcd
+  expiration-ms: 86400000

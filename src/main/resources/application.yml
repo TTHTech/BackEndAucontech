@@ -3,16 +3,16 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/blogdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=utf8
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 123456
+    url: jdbc:postgresql://ep-shy-dream-a1cm704u-pooler.ap-southeast-1.aws.neon.tech:5432/neondb?sslmode=require
+    driver-class-name: org.postgresql.Driver
+    username: neondb_owner
+    password: npg_uMdCyfnI74aG
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     properties:
-      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
 
 jwt:
   secret: change-this-to-a-very-long-random-secret-change-me-1234567890abcd
